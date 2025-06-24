@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MemberView from '@/views/MemberView.vue'
 import BookVue from '@/views/BookVue.vue'
+import CategoryTable from '@/views/CategoryTable.vue'
 // import Register from '@/views/Register.vue'
 // import Register from '@/components/Register.vue'
 
@@ -22,6 +23,11 @@ const router = createRouter({
       path: '/books',
       name: 'books',
       component: BookVue,
+    },
+    {
+      path: '/category',
+      name: 'category',
+      component: CategoryTable,
     },
     
     {
