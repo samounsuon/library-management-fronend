@@ -27,72 +27,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Desktop Navigation -->
-          <nav class="hidden lg:flex space-x-1">
-            <RouterLink
-              to="/"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-50"
-              :class="$route.path === '/' 
-                ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-              </svg>
-              Home
-            </RouterLink>
-            <RouterLink
-              to="/about"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-50"
-              :class="$route.path === '/about' 
-                ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              About
-            </RouterLink>
-            <RouterLink
-              to="/contact"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-50"
-              :class="$route.path === '/contact' 
-                ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-              </svg>
-              Contact
-            </RouterLink>
-            <button
-              @click="showAdminLogin = true"
-              class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-50"
-              :class="isAuthenticated 
-                ? 'text-green-600 bg-green-50 shadow-sm' 
-                : 'text-gray-600 hover:text-gray-900'"
-            >
-              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-              </svg>
-              Admin
-              <span v-if="isAuthenticated" class="ml-2 w-2 h-2 bg-green-500 rounded-full"></span>
-            </button>
-          </nav>
-
-          <!-- Mobile Menu Button -->
-          <div class="lg:hidden">
-            <button
-              @click="mobileMenuOpen = !mobileMenuOpen"
-              class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 transition-colors duration-200"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
-
           <!-- Header Right Side - Desktop -->
           <div class="hidden lg:flex items-center space-x-3">
             <button class="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200">
@@ -112,110 +46,8 @@
             </div>
           </div>
         </div>
-
-        <!-- Mobile Navigation Menu -->
-        <div v-if="mobileMenuOpen" class="lg:hidden border-t border-gray-200 py-2">
-          <div class="space-y-1">
-            <RouterLink
-              to="/"
-              @click="mobileMenuOpen = false"
-              class="block px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
-              :class="$route.path === '/' 
-                ? 'text-blue-600 bg-blue-50' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
-            >
-              🏠 Home
-            </RouterLink>
-            <RouterLink
-              to="/about"
-              @click="mobileMenuOpen = false"
-              class="block px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
-              :class="$route.path === '/about' 
-                ? 'text-blue-600 bg-blue-50' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
-            >
-              ℹ️ About
-            </RouterLink>
-            <RouterLink
-              to="/contact"
-              @click="mobileMenuOpen = false"
-              class="block px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
-              :class="$route.path === '/contact' 
-                ? 'text-blue-600 bg-blue-50' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
-            >
-              📧 Contact
-            </RouterLink>
-            <button
-              @click="showAdminLogin = true; mobileMenuOpen = false"
-              class="block w-full text-left px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
-              :class="isAuthenticated 
-                ? 'text-green-600 bg-green-50' 
-                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
-            >
-              🔐 Admin
-              <span v-if="isAuthenticated" class="ml-2 text-xs">(Logged in)</span>
-            </button>
-          </div>
-        </div>
       </div>
     </header>
-
-    <!-- Admin Login Modal -->
-    <div v-if="showAdminLogin" class="fixed inset-0 z-50 overflow-y-auto">
-      <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="closeAdminLogin"></div>
-        
-        <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-          <div>
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
-              <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-              </svg>
-            </div>
-            <div class="mt-3 text-center sm:mt-5">
-              <h3 class="text-lg leading-6 font-medium text-gray-900">Admin Access</h3>
-              <div class="mt-2">
-                <p class="text-sm text-gray-500">Enter admin password to access dashboard</p>
-                <p class="text-xs text-gray-400 mt-1">Session will be saved for 7 days</p>
-              </div>
-            </div>
-          </div>
-          
-          <form @submit.prevent="handleAdminLogin" class="mt-5 sm:mt-6">
-            <div>
-              <label for="password" class="sr-only">Password</label>
-              <input
-                id="password"
-                v-model="adminPassword"
-                type="password"
-                placeholder="Enter admin password"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                :class="{ 'border-red-300 focus:ring-red-500 focus:border-red-500': loginError }"
-              />
-              <p v-if="loginError" class="mt-2 text-sm text-red-600">{{ loginError }}</p>
-            </div>
-            
-            <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <button
-                type="submit"
-                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:col-start-2 sm:text-sm transition-colors duration-200"
-              >
-                Login
-              </button>
-              <button
-                type="button"
-                @click="closeAdminLogin"
-                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:col-start-1 sm:text-sm transition-colors duration-200"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
     <div class="flex pt-16">
       <!-- Sidebar - Only show if authenticated -->
       <aside 
@@ -404,15 +236,13 @@ const router = useRouter()
 
 const sidebarOpen = ref(false)
 const mobileMenuOpen = ref(false)
-const showAdminLogin = ref(false)
-const adminPassword = ref('')
-const loginError = ref('')
+
 const isAuthenticated = ref(false)
 const sessionTimeRemaining = ref('')
 
-const ADMIN_PASSWORD = 'Admin@2025'
+
 const STORAGE_KEY = 'library_admin_auth'
-const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
+const SESSION_DURATION = 7 * 24 * 60 * 60 * 1000 
 
 // Define protected routes that require authentication
 const protectedRoutes = ['/dashboard', '/books', '/category', '/member', '/settings']
@@ -500,50 +330,6 @@ watch(() => route.path, (newPath) => {
     // This allows the URL to stay but shows protection message
   }
 })
-
-const handleAdminLogin = () => {
-  if (adminPassword.value === ADMIN_PASSWORD) {
-    isAuthenticated.value = true
-    showAdminLogin.value = false
-    adminPassword.value = ''
-    loginError.value = ''
-    
-    // Save to localStorage
-    saveAuthToStorage()
-    
-    // Start session timer
-    startSessionTimer()
-    
-    // If user was trying to access a protected route, they can now see it
-    // No need to redirect, the computed property will handle the display
-  } else {
-    loginError.value = 'Invalid password. Please try again.'
-    adminPassword.value = ''
-  }
-}
-
-const closeAdminLogin = () => {
-  showAdminLogin.value = false
-  adminPassword.value = ''
-  loginError.value = ''
-}
-
-const logout = () => {
-  isAuthenticated.value = false
-  sidebarOpen.value = false
-  
-  // Clear from localStorage
-  clearAuthFromStorage()
-  
-  // Stop session timer
-  stopSessionTimer()
-  
-  // If user is on a protected route when logging out, redirect to home
-  if (isProtectedRoute.value) {
-    router.push('/')
-  }
-}
-
 const startSessionTimer = () => {
   updateSessionTimeRemaining()
   sessionTimer = setInterval(updateSessionTimeRemaining, 60000) // Update every minute
