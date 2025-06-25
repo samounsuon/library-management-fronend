@@ -1,37 +1,64 @@
 <template>
-  <div class="min-h-screen bg-gray-50 p-4 sm:p-6">
-    <div class="max-w-full mx-auto">
-      <!-- Header with Create Button -->
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Book Store</h1>
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header Section -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">Book Store</h1>
+          <p class="mt-2 text-sm text-gray-600">Manage your book collection with ease</p>
+        </div>
         <button
           @click="openCreateDialog"
-          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200 flex items-center w-full sm:w-auto justify-center"
+          class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-300 flex items-center shadow-md hover:shadow-lg w-full sm:w-auto justify-center transform hover:-translate-y-0.5 ring-1 ring-indigo-300"
         >
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
           </svg>
-          Create New Book
+          Add New Book
         </button>
       </div>
 
+      <!-- Search and Filter Bar -->
+      <div class="mb-6 bg-white rounded-lg shadow-sm p-4 flex flex-col sm:flex-row gap-4">
+        <div class="relative flex-1">
+          <svg class="absolute left-3 top-3 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search books by title or author..."
+            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <select
+          v-model="categoryFilter"
+          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <option value="">All Categories</option>
+          <option v-for="category in categories" :key="category.id" :value="category.id">
+            {{ category.type }}
+          </option>
+        </select>
+      </div>
+
       <!-- Loading State -->
-      <div v-if="loading" class="bg-white rounded-lg shadow-md p-8 text-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p class="text-gray-600">Loading books...</p>
+      <div v-if="loading" class="bg-white rounded-lg shadow-md p-12 text-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-4 border-indigo-600 border-t-transparent mx-auto mb-4"></div>
+        <p class="text-gray-600 font-medium">Loading your book collection...</p>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-        <div class="flex">
-          <svg class="w-5 h-5 text-red-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+        <div class="flex items-center">
+          <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
           </svg>
           <div class="flex-1">
-            <h3 class="text-sm font-medium text-red-800">Error</h3>
-            <p class="text-sm text-red-700 mt-1">{{ error }}</p>
-            <button @click="loadBooks" class="mt-2 text-sm text-red-800 underline hover:text-red-900">
-              Try again
+            <h3 class="text-base font-semibold text-red-800">Error</h3>
+            <p class="text-sm text-red-600 mt-1">{{ error }}</p>
+            <button @click="loadBooks" class="mt-3 text-sm text-red-700 font-medium hover:text-red-800 transition-colors">
+              Try Again
             </button>
           </div>
         </div>
@@ -41,19 +68,22 @@
       <div v-else class="bg-white rounded-lg shadow-md overflow-hidden">
         <!-- Mobile Card View -->
         <div class="block sm:hidden">
-          <div v-for="(book, index) in books" :key="index" class="border-b border-gray-200 p-4">
-            <div class="space-y-2">
-              <h3 class="text-sm font-medium text-gray-900">{{ book.title }}</h3>
-              <p class="text-sm text-gray-500">by {{ book.author }}</p>
-              <p class="text-sm text-gray-500">{{ book.year }} • {{ getCategoryName(book.category_id) }}</p>
-              
-              <div class="flex space-x-2 pt-2">
+          <div v-for="book in filteredBooks" :key="book.id" class="border-b border-gray-200 p-6 last:border-b-0">
+            <div class="space-y-3">
+              <h3 class="text-base font-semibold text-gray-900">{{ book.title }}</h3>
+              <p class="text-sm text-gray-600">by {{ book.author }}</p>
+              <div class="flex justify-between text-sm text-gray-600">
+                <span>{{ book.year }}</span>
+                <span>{{ getCategoryName(book.category_id) }}</span>
+              </div>
+              <div class="text-sm text-gray-600">Available: {{ book.numofbooks }}</div>
+              <div class="flex space-x-2 pt-4">
                 <button
                   @click="openEditDialog(book)"
                   :disabled="updating === book.id"
-                  class="bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 disabled:opacity-50"
+                  class="flex-1 bg-orange-500 text-white hover:bg-orange-600 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-md hover:shadow-lg ring-1 ring-orange-300"
                 >
-                  <svg v-if="updating === book.id" class="animate-spin w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24">
+                  <svg v-if="updating === book.id" class="animate-spin w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -62,9 +92,9 @@
                 <button
                   @click="deleteBook(book.id)"
                   :disabled="deleting === book.id"
-                  class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 disabled:opacity-50"
+                  class="flex-1 bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg text-xs font-semibold transition-all duration-300 disabled:opacity-50 flex items-center justify-center shadow-md hover:shadow-lg ring-1 ring-red-300"
                 >
-                  <svg v-if="deleting === book.id" class="animate-spin w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24">
+                  <svg v-if="deleting === book.id" class="animate-spin w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
@@ -73,179 +103,177 @@
               </div>
             </div>
           </div>
-          
           <!-- Mobile Empty State -->
-          <div v-if="books.length === 0 && !loading" class="p-8 text-center">
-            <div class="text-gray-400 mb-4">
-              <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"></path>
-              </svg>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">No books available</h3>
-            <p class="text-gray-500">Check back later for new additions to our collection.</p>
+          <div v-if="filteredBooks.length === 0 && !loading" class="p-12 text-center">
+            <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"></path>
+            </svg>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">No Books Found</h3>
+            <p class="text-gray-500">Try adjusting your search or add a new book.</p>
           </div>
         </div>
 
         <!-- Desktop Table View -->
         <div class="hidden sm:block overflow-x-auto">
           <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
+            <thead class="bg-gray-200">
               <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider cursor-pointer" @click="sortBooks('title')">
+                  Title
+                  <svg v-if="sortKey === 'title'" class="inline w-4 h-4 ml-1" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider cursor-pointer" @click="sortBooks('author')">
+                  Author
+                  <svg v-if="sortKey === 'author'" class="inline w-4 h-4 ml-1" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider cursor-pointer" @click="sortBooks('year')">
+                  Year
+                  <svg v-if="sortKey === 'year'" class="inline w-4 h-4 ml-1" :class="{ 'rotate-180': sortOrder === 'desc' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Category</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Available</th>
+                <th class="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="(book, index) in books" :key="index" class="hover:bg-gray-50">
-                <!-- Book Title -->
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm font-medium text-gray-900">{{ book.title }}</div>
-                </td>
-                
-                <!-- Author -->
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.author }}</div>
-                </td>
-                
-                <!-- Year -->
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ book.year }}</div>
-                </td>
-                
-                <!-- Category -->
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div class="text-sm text-gray-900">{{ getCategoryName(book.category_id) }}</div>
-                </td>
-                
-                <!-- Actions -->
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+            <tbody class="divide-y divide-gray-200">
+              <tr v-for="book in filteredBooks" :key="book.id" class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ book.title }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-black">{{ book.author }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-black">{{ book.year }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-black">{{ getCategoryName(book.category_id) }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-black">{{ book.numofbooks }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
                   <div class="flex space-x-2">
-                    <button
-                      @click="openEditDialog(book)"
-                      :disabled="updating === book.id"
-                      class="bg-yellow-50 text-yellow-600 hover:bg-yellow-100 px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 disabled:opacity-50"
-                      title="Edit book"
-                    >
-                      <svg v-if="updating === book.id" class="animate-spin w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Edit
-                    </button>
-                    <button
-                      @click="deleteBook(book.id)"
-                      :disabled="deleting === book.id"
-                      class="bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1 rounded-md text-xs font-medium transition-colors duration-200 disabled:opacity-50"
-                      title="Delete book"
-                    >
-                      <svg v-if="deleting === book.id" class="animate-spin w-4 h-4 inline mr-1" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Delete
-                    </button>
+                   <!-- Edit Button -->
+<!-- Edit Button (blue) -->
+<button
+  @click="openEditDialog(book)"
+  :disabled="updating === book.id"
+  class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md"
+>
+  Edit
+</button>
+
+<!-- Delete Button (red) -->
+<button
+  @click="deleteBook(book.id)"
+  :disabled="deleting === book.id"
+  class="bg-red-500 hover:bg-red-600 text-white text-xs font-semibold px-3 py-2 rounded-md transition-all duration-200 disabled:opacity-50 shadow-sm hover:shadow-md"
+>
+  Delete
+</button>
+
+
                   </div>
                 </td>
               </tr>
-              
               <!-- Desktop Empty State -->
-              <tr v-if="books.length === 0 && !loading">
-                <td colspan="5" class="px-6 py-12 text-center">
-                  <div class="text-gray-400 mb-4">
-                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"></path>
-                    </svg>
-                  </div>
-                  <h3 class="text-lg font-medium text-gray-900 mb-2">No books available</h3>
-                  <p class="text-gray-500">Check back later for new additions to our collection.</p>
+              <tr v-if="filteredBooks.length === 0 && !loading">
+                <td colspan="6" class="px-6 py-16 text-center">
+                  <svg class="w-20 h-20 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"></path>
+                  </svg>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-2">No Books Found</h3>
+                  <p class="text-gray-500">Try adjusting your search or add a new book.</p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- Create/Edit Modal -->
-    <div v-if="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-      <div class="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white m-4">
-        <div class="mt-3">
-          <h3 class="text-lg font-medium text-gray-900 mb-4">
-            {{ isEditing ? 'Edit Book' : 'Create New Book' }}
+      <!-- Create/Edit Modal -->
+      <div v-if="showModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+          <button
+            @click="closeModal"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+          
+          <h3 class="text-xl font-bold text-gray-900 mb-6">
+            {{ isEditing ? 'Edit Book' : 'Add New Book' }}
           </h3>
-          
+
           <!-- Error in Modal -->
-          <div v-if="modalError" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-            <p class="text-sm text-red-700">{{ modalError }}</p>
+          <div v-if="modalError" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+            <p class="text-sm text-red-600 font-medium">{{ modalError }}</p>
           </div>
-          
-          <form @submit.prevent="isEditing ? updateBook() : createBook()" class="space-y-4">
+
+          <form @submit.prevent="isEditing ? updateBook() : createBook()" class="space-y-5">
             <div>
-              <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">Title</label>
               <input
                 v-model="formData.title"
                 type="text"
                 id="title"
                 required
                 :disabled="submitting"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all"
                 placeholder="Enter book title"
               />
             </div>
-            
+
             <div>
-              <label for="author" class="block text-sm font-medium text-gray-700 mb-1">Author</label>
+              <label for="author" class="block text-sm font-medium text-gray-700 mb-1.5">Author</label>
               <input
                 v-model="formData.author"
                 type="text"
                 id="author"
                 required
                 :disabled="submitting"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all"
                 placeholder="Enter author name"
               />
             </div>
-            
-            <div>
-              <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
-              <input
-                v-model.number="formData.year"
-                type="number"
-                id="year"
-                required
-                :disabled="submitting"
-                min="1000"
-                max="2100"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
-                placeholder="Enter publication year"
-              />
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="year" class="block text-sm font-medium text-gray-700 mb-1.5">Year</label>
+                <input
+                  v-model.number="formData.year"
+                  type="number"
+                  id="year"
+                  required
+                  :disabled="submitting"
+                  min="1000"
+                  :max="new Date().getFullYear() + 1"
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all"
+                  placeholder="Publication year"
+                />
+              </div>
+              <div>
+                <label for="numofbooks" class="block text-sm font-medium text-gray-700 mb-1.5">Quantity</label>
+                <input
+                  v-model.number="formData.numofbooks"
+                  type="number"
+                  id="numofbooks"
+                  required
+                  min="0"
+                  :disabled="submitting"
+                  class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all"
+                  placeholder="Number of books"
+                />
+              </div>
             </div>
-            
+
             <div>
-              <label for="numofbooks" class="block text-sm font-medium text-gray-700 mb-1">Number of Books</label>
-              <input
-                v-model.number="formData.numofbooks"
-                type="number"
-                id="numofbooks"
-                required
-                min="0"
-                :disabled="submitting"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
-                placeholder="Enter number of books"
-              />
-            </div>
-            
-            <div>
-              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-1.5">Category</label>
               <select
                 v-model="formData.category_id"
                 id="category"
                 required
                 :disabled="submitting"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100"
+                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 disabled:bg-gray-100 transition-all"
               >
                 <option value="">Select a category</option>
                 <option v-for="category in categories" :key="category.id" :value="category.id">
@@ -253,26 +281,26 @@
                 </option>
               </select>
             </div>
-            
-            <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4">
+
+            <div class="flex justify-end space-x-3 pt-6">
               <button
                 type="button"
                 @click="closeModal"
                 :disabled="submitting"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors duration-200 disabled:opacity-50"
+                class="px-4 py-2 text-xs font-semibold text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-lg transition-all duration-300 disabled:opacity-50 shadow-md hover:shadow-lg ring-1 ring-gray-400"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 :disabled="submitting"
-                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors duration-200 disabled:opacity-50 flex items-center justify-center"
+                class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-all duration-300 disabled:opacity-50 flex items-center shadow-md hover:shadow-lg ring-1 ring-indigo-300"
               >
-                <svg v-if="submitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                <svg v-if="submitting" class="animate-spin w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24">
                   <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                   <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {{ submitting ? 'Processing...' : (isEditing ? 'Update Book' : 'Create Book') }}
+                {{ submitting ? 'Processing...' : (isEditing ? 'Update Book' : 'Add Book') }}
               </button>
             </div>
           </form>
@@ -283,7 +311,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import api from '@/plugins/axios'
 
 const books = ref([])
@@ -297,24 +325,61 @@ const editingBookId = ref(null)
 const submitting = ref(false)
 const updating = ref(null)
 const deleting = ref(null)
+const searchQuery = ref('')
+const categoryFilter = ref('')
+const sortKey = ref('title')
+const sortOrder = ref('asc')
 
-// Book form data - set image to a default placeholder value
 const formData = ref({
   title: '',
   author: '',
   year: new Date().getFullYear(),
   category_id: '',
-  numofbooks: '',
-  image: 'no-image.jpg' // Set a default placeholder image name
+  numofbooks: 0,
+  image: 'no-image.jpg'
 })
 
-// Get category name by ID
 const getCategoryName = (categoryId) => {
   const category = categories.value.find(cat => cat.id === categoryId)
   return category ? category.type : 'Unknown'
 }
 
-// Load all books
+const filteredBooks = computed(() => {
+  let filtered = books.value
+
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(book =>
+      book.title.toLowerCase().includes(query) ||
+      book.author.toLowerCase().includes(query)
+    )
+  }
+
+  if (categoryFilter.value) {
+    filtered = filtered.filter(book => book.category_id === categoryFilter.value)
+  }
+
+  return filtered.sort((a, b) => {
+    const valueA = a[sortKey.value]
+    const valueB = b[sortKey.value]
+    const modifier = sortOrder.value === 'asc' ? 1 : -1
+
+    if (typeof valueA === 'string') {
+      return valueA.localeCompare(valueB) * modifier
+    }
+    return (valueA - valueB) * modifier
+  })
+})
+
+const sortBooks = (key) => {
+  if (sortKey.value === key) {
+    sortOrder.value = sortOrder.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortKey.value = key
+    sortOrder.value = 'asc'
+  }
+}
+
 const loadBooks = async () => {
   loading.value = true
   error.value = null
@@ -329,7 +394,6 @@ const loadBooks = async () => {
   }
 }
 
-// Load all categories
 const loadCategories = async () => {
   try {
     const response = await api.get('/category')
@@ -339,20 +403,18 @@ const loadCategories = async () => {
   }
 }
 
-// Create a new book
 const createBook = async () => {
   submitting.value = true
   modalError.value = null
 
-  // Basic client-side validation
   if (
     !formData.value.title ||
     !formData.value.author ||
     !formData.value.year ||
     !formData.value.category_id ||
-    !formData.value.numofbooks
+    formData.value.numofbooks < 0
   ) {
-    modalError.value = 'All fields are required.'
+    modalError.value = 'All fields are required and quantity must be non-negative.'
     submitting.value = false
     return
   }
@@ -369,12 +431,11 @@ const createBook = async () => {
   }
 }
 
-// Update existing book
 const updateBook = async () => {
   submitting.value = true
   updating.value = editingBookId.value
   modalError.value = null
-  
+
   try {
     const response = await api.put(`/books/${editingBookId.value}`, formData.value)
     const bookIndex = books.value.findIndex(book => book.id === editingBookId.value)
@@ -391,9 +452,8 @@ const updateBook = async () => {
   }
 }
 
-// Delete book
 const deleteBook = async (bookId) => {
-  if (!confirm('Are you sure you want to delete this book?')) return
+  if (!confirm('Are you sure you want to delete this book? This action cannot be undone.')) return
   deleting.value = bookId
   try {
     await api.delete(`/books/${bookId}`)
@@ -406,7 +466,6 @@ const deleteBook = async (bookId) => {
   }
 }
 
-// Open create book modal
 const openCreateDialog = () => {
   isEditing.value = false
   modalError.value = null
@@ -415,32 +474,27 @@ const openCreateDialog = () => {
     author: '',
     year: new Date().getFullYear(),
     category_id: '',
-    numofbooks: '',
-    image: 'no-image.jpg' // Set a default placeholder image name
+    numofbooks: 0,
+    image: 'no-image.jpg'
   }
   showModal.value = true
 }
 
-// Open edit book modal
 const openEditDialog = (book) => {
   isEditing.value = true
   editingBookId.value = book.id
   modalError.value = null
-  
-  // Set form data
   formData.value = {
     title: book.title,
     author: book.author,
     year: book.year,
     category_id: book.category_id,
     numofbooks: book.numofbooks,
-    image: book.image || 'no-image.jpg' // Use existing image or default placeholder
+    image: book.image || 'no-image.jpg'
   }
-  
   showModal.value = true
 }
 
-// Close modal
 const closeModal = () => {
   showModal.value = false
   isEditing.value = false
