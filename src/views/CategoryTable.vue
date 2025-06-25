@@ -1,18 +1,13 @@
 <template>
   <div class="max-w-6xl mx-auto p-6 space-y-6">
-    <div class="bg-white shadow rounded-lg border">
+    <!-- <div class="bg-white shadow rounded-lg border"> -->
       <!-- Header -->
-      <div class="px-6 py-4 border-b">
+     
         <div class="flex items-center gap-2 mb-2">
-          <div class="h-8 w-8 bg-blue-100 rounded-lg flex items-center justify-center">
-            <svg class="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-          </div>
           <h2 class="text-2xl font-bold text-gray-900">Category Management</h2>
         </div>
         <p class="text-gray-600">Manage your product categories. Add, edit, or remove categories as needed.</p>
-      </div>
+      
 
       <div class="p-6 space-y-6">
         <!-- Add New Category -->
@@ -45,7 +40,7 @@
         <div class="border rounded-lg overflow-hidden">
           <div class="overflow-x-auto">
             <table class="w-full">
-              <thead class="bg-gray-50 border-b">
+              <thead class="bg-gray-200 border-b">
                 <tr>
                   <th class="text-left px-6 py-3 text-xs font-medium text-black uppercase tracking-wider">
                     ID
@@ -159,7 +154,7 @@
 
         <!-- Table Footer with Stats -->
         <div v-if="!loading"
-          class="flex items-center justify-between text-sm text-gray-500 bg-gray-50 px-6 py-3 rounded-lg border">
+          class="flex items-center justify-between text-sm text-gray-500 bg-gray-100 px-6 py-3 rounded-lg border">
           <div>
             Showing {{ filteredCategories.length }} of {{ categories.length }} categories
           </div>
@@ -171,7 +166,7 @@
             Filtered by: "{{ searchTerm }}"
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
 
     <!-- Toast Notification -->

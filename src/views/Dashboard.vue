@@ -7,12 +7,12 @@
           <div class="flex items-center space-x-4">
             <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 006 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
               </svg>
             </div>
             <div>
-              <h1 class="text-2xl font-bold text-gray-900">Manufacturing Unit Dashboard</h1>
-              <p class="text-sm text-gray-500">Real-time production monitoring & analytics</p>
+              <h1 class="text-2xl font-bold text-gray-900">Library Management Dashboard</h1>
+              <p class="text-sm text-gray-500">Real-time library operations & analytics</p>
             </div>
           </div>
           
@@ -46,21 +46,48 @@
     <div class="p-6">
       <!-- Key Metrics Cards -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <!-- Units Lost Card -->
+        <!-- Books Issued Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
+          <div class="flex items-start justify-between">
+            <div class="flex-1">
+              <div class="flex items-center space-x-2 mb-2">
+                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                <p class="text-sm font-medium text-gray-600">Books Issued</p>
+              </div>
+              <p class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(metrics.booksIssued) }}</p>
+              <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                  {{ metrics.booksIssuedChange }}%
+                </span>
+                <span class="text-xs text-gray-500">from last year</span>
+              </div>
+            </div>
+            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors duration-200">
+              <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 006 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overdue Books Card -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
           <div class="flex items-start justify-between">
             <div class="flex-1">
               <div class="flex items-center space-x-2 mb-2">
                 <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-                <p class="text-sm font-medium text-gray-600">Units Lost</p>
+                <p class="text-sm font-medium text-gray-600">Overdue Books</p>
               </div>
-              <p class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(metrics.unitsLost) }}</p>
+              <p class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(metrics.overdueBooks) }}</p>
               <div class="flex items-center space-x-2">
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
                   <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                   </svg>
-                  {{ metrics.unitsLostChange }}%
+                  {{ metrics.overdueBooksChange }}%
                 </span>
                 <span class="text-xs text-gray-500">from last year</span>
               </div>
@@ -73,81 +100,61 @@
           </div>
         </div>
 
-        <!-- Units Produced YTD Card -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
+        <!-- Visitor Count Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray booze-200 p-6 hover:shadow-md transition-all duration-300 group">
           <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <p class="text-sm font-medium text-gray-600">Units Produced YTD</p>
-              </div>
-              <p class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(metrics.unitsProduced) }}</p>
-              <div class="flex items-center space-x-2">
-                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                  <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                  </svg>
-                  {{ metrics.unitsProducedChange }}%
-                </span>
-                <span class="text-xs text-gray-500">from last year</span>
-              </div>
-            </div>
-            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center group-hover:bg-blue-100 transition-colors duration-200">
-              <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-
-        <!-- Overall Plant Production Card -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center space-x-2 mb-2">
-                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
-                <p class="text-sm font-medium text-gray-600">Overall Plant Production</p>
-              </div>
-              <p class="text-3xl font-bold text-gray-900 mb-2">{{ metrics.plantProduction }}%</p>
-              <div class="flex items-center space-x-2">
-                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                  </svg>
-                  {{ metrics.plantProductionChange }}%
-                </span>
-                <span class="text-xs text-gray-500">from last year</span>
-              </div>
-            </div>
+           <div class="flex items-start justify-between">
+  <div class="flex-1">
+    <div class="flex items-center space-x-2 mb-2">
+      <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+      <p class="text-sm font-medium text-gray-600">Visitor Count</p>
+    </div>
+    <p class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(metrics.visitorCount) }}</p>
+    <div class="flex items-center space-x-2">
+      <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+        </svg>
+        {{ metrics.visitorCountChange }}%
+      </span>
+      <span class="text-xs text-gray-500">from last year</span>
+    </div>
+  </div>
+  <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors duration-200">
+    <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v2h5v-2c0-.656.126-1.283.356-1.857M7 20v-2c0-.656-.126-1.283-.356-1.857m0 1.857a5.002 5.002 0 01-4.288-3.714C2.117 11.784 2 10.91 2 10c0-5.523 4.477-10 10-10s10 4.477 10 10c0 .91-.117 1.784-.356 2.643"></path>
+    </svg>
+  </div>
+</div>
             <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center group-hover:bg-green-100 transition-colors duration-200">
               <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v2h5v-2c0-.656.126-1.283.356-1.857M7 20v-2c0-.656-.126-1.283-.356-1.857m0 1.857a5.002 5.002 0 01-4.288-3.714C2.117 11.784 2 10.91 2 10c0-5.523 4.477-10 10-10s10 4.477 10 10c0 .91-.117 1.784-.356 2.643"></path>
               </svg>
             </div>
           </div>
         </div>
 
-        <!-- Unit Maintenance Cost Card -->
+        <!-- Digital Resource Usage Card -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
           <div class="flex items-start justify-between">
             <div class="flex-1">
               <div class="flex items-center space-x-2 mb-2">
                 <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
-                <p class="text-sm font-medium text-gray-600">Unit Maintenance Cost</p>
+                <p class="text-sm font-medium text-gray-600">Digital Resource Usage</p>
               </div>
-              <p class="text-3xl font-bold text-gray-900 mb-1">${{ metrics.maintenanceCost }}</p>
-              <p class="text-xs text-gray-500 mb-3">Cost per unit</p>
+              <p class="text-3xl font-bold text-gray-900 mb-1">{{ formatNumber(metrics.digitalUsage) }}</p>
+              <p class="text-xs text-gray-500 mb-3">Accesses per month</p>
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-1000 ease-out" :style="{ width: maintenanceProgress + '%' }"></div>
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-1000 ease-out" :style="{ width: digitalUsageProgress + '%' }"></div>
               </div>
               <div class="flex justify-between text-xs text-gray-500 mt-1">
-                <span>Optimal</span>
-                <span>{{ maintenanceProgress }}%</span>
+                <span>Target</span>
+                <span>{{ digitalUsageProgress }}%</span>
               </div>
             </div>
             <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center group-hover:bg-purple-100 transition-colors duration-200">
               <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
               </svg>
             </div>
           </div>
@@ -156,12 +163,12 @@
 
       <!-- Charts Section -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <!-- Units Lost by Machine Chart -->
+        <!-- Books Issued by Category Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Units Lost: Machine</h3>
-              <p class="text-sm text-gray-500">Monthly breakdown by machine type</p>
+              <h3 class="text-lg font-semibold text-gray-900">Books Issued: Category</h3>
+              <p class="text-sm text-gray-500">Monthly breakdown by book category</p>
             </div>
             <div class="flex items-center space-x-2">
               <select class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -177,15 +184,15 @@
           </div>
           
           <div class="h-64 flex items-end justify-between space-x-2 mb-4">
-            <div v-for="(month, index) in chartData.unitsLost" :key="index" class="flex-1 flex flex-col items-center space-y-1">
+            <div v-for="(month, index) in chartData.booksIssued" :key="index" class="flex-1 flex flex-col items-center space-y-1">
               <div class="w-full flex items-end justify-center space-x-1 h-48">
                 <div 
-                  v-for="(machine, machineIndex) in month.machines" 
-                  :key="machineIndex"
+                  v-for="(category, categoryIndex) in month.categories" 
+                  :key="categoryIndex"
                   class="w-3 rounded-t transition-all duration-1000 ease-out hover:opacity-80 cursor-pointer"
-                  :class="machine.color"
-                  :style="{ height: (machine.value / 50) * 100 + '%' }"
-                  :title="`${machine.name}: ${machine.value} units`"
+                  :class="category.color"
+                  :style="{ height: (category.value / 500) * 100 + '%' }"
+                  :title="formatTitle(category.name, category.value, 'books')"
                 ></div>
               </div>
               <span class="text-xs text-gray-500 font-medium">{{ month.label }}</span>
@@ -195,25 +202,25 @@
           <div class="flex items-center justify-center space-x-6">
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-indigo-600 rounded"></div>
-              <span class="text-sm text-gray-600">Machine A</span>
+              <span class="text-sm text-gray-600">Fiction</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-yellow-500 rounded"></div>
-              <span class="text-sm text-gray-600">Machine B</span>
+              <span class="text-sm text-gray-600">Non-Fiction</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-purple-500 rounded"></div>
-              <span class="text-sm text-gray-600">Machine C</span>
+              <span class="text-sm text-gray-600">Academic</span>
             </div>
           </div>
         </div>
 
-        <!-- Productivity by Machine Chart -->
+        <!-- Visitor Trends Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Productivity by Machine</h3>
-              <p class="text-sm text-gray-500">Performance efficiency metrics</p>
+              <h3 class="text-lg font-semibold text-gray-900">Visitor Trends</h3>
+              <p class="text-sm text-gray-500">Daily visitor statistics</p>
             </div>
             <div class="flex items-center space-x-2">
               <select class="bg-gray-50 border border-gray-200 rounded-lg px-3 py-1 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -229,15 +236,15 @@
           </div>
           
           <div class="h-64 flex items-end justify-between space-x-2 mb-4">
-            <div v-for="(month, index) in chartData.productivity" :key="index" class="flex-1 flex flex-col items-center space-y-1">
+            <div v-for="(month, index) in chartData.visitors" :key="index" class="flex-1 flex flex-col items-center space-y-1">
               <div class="w-full flex items-end justify-center space-x-1 h-48">
                 <div 
-                  v-for="(machine, machineIndex) in month.machines" 
-                  :key="machineIndex"
+                  v-for="(category, categoryIndex) in month.categories" 
+                  :key="categoryIndex"
                   class="w-3 rounded-t transition-all duration-1000 ease-out hover:opacity-80 cursor-pointer"
-                  :class="machine.color"
-                  :style="{ height: machine.value + '%' }"
-                  :title="`${machine.name}: ${machine.value}%`"
+                  :class="category.color"
+                  :style="{ height: (category.value / 400) * 40 + '%' }"
+                  :title="formatTitle(category.name, category.value, 'visitors')"
                 ></div>
               </div>
               <span class="text-xs text-gray-500 font-medium">{{ month.label }}</span>
@@ -247,15 +254,15 @@
           <div class="flex items-center justify-center space-x-6">
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-indigo-600 rounded"></div>
-              <span class="text-sm text-gray-600">Machine A</span>
+              <span class="text-sm text-gray-600">Students</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-yellow-500 rounded"></div>
-              <span class="text-sm text-gray-600">Machine B</span>
+              <span class="text-sm text-gray-600">Faculty</span>
             </div>
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-purple-500 rounded"></div>
-              <span class="text-sm text-gray-600">Machine C</span>
+              <span class="text-sm text-gray-600">Guests</span>
             </div>
           </div>
         </div>
@@ -263,12 +270,12 @@
 
       <!-- Bottom Charts Row -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Operators Available Chart -->
+        <!-- Staff Availability Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Operators Available</h3>
-              <p class="text-sm text-gray-500">Staff availability trend</p>
+              <h3 class="text-lg font-semibold text-gray-900">Staff Availability</h3>
+              <p class="text-sm text-gray-500">Librarian availability trend</p>
             </div>
             <button class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors duration-200">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -280,32 +287,32 @@
           <div class="h-32 relative">
             <svg viewBox="0 0 300 120" class="w-full h-full">
               <defs>
-                <linearGradient id="operatorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <linearGradient id="staffGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                   <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3" />
                   <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0" />
                 </linearGradient>
               </defs>
               <polyline 
-                :points="operatorLinePoints" 
+                :points="staffLinePoints" 
                 fill="none" 
                 stroke="#f59e0b" 
                 stroke-width="3"
                 class="transition-all duration-1000 ease-out"
               />
               <polygon 
-                :points="operatorAreaPoints" 
-                fill="url(#operatorGradient)"
+                :points="staffAreaPoints" 
+                fill="url(#staffGradient)"
                 class="transition-all duration-1000 ease-out"
               />
               <circle 
-                v-for="(point, index) in operatorPoints" 
+                v-for="(point, index) in staffPoints" 
                 :key="index"
                 :cx="point.x" 
                 :cy="point.y" 
                 r="4" 
                 fill="#f59e0b"
                 class="hover:r-6 transition-all duration-200 cursor-pointer"
-                :title="`${point.value} operators`"
+                :title="formatTitle('Staff', point.value, 'staff')"
               />
             </svg>
           </div>
@@ -313,16 +320,16 @@
           <div class="flex items-center justify-center mt-4">
             <div class="flex items-center space-x-2">
               <div class="w-3 h-3 bg-yellow-500 rounded"></div>
-              <span class="text-sm text-gray-600">Available Operators</span>
+              <span class="text-sm text-gray-600">Available Staff</span>
             </div>
           </div>
         </div>
 
-        <!-- Units Lost Causes Pie Chart -->
+        <!-- Overdue Reasons Pie Chart -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Units Lost: Causes</h3>
+              <h3 class="text-lg font-semibold text-gray-900">Overdue Reasons</h3>
               <p class="text-sm text-gray-500">Root cause analysis</p>
             </div>
             <button class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors duration-200">
@@ -344,33 +351,33 @@
                   :fill="segment.color" 
                   stroke="white" 
                   stroke-width="2"
-                  :stroke-dasharray="`${segment.length} 314.16`"
+                  :stroke-dasharray="[segment.length, 314.16]"
                   :stroke-dashoffset="segment.offset"
                   class="hover:opacity-80 cursor-pointer transition-all duration-300"
-                  :title="`${segment.label}: ${segment.percentage}%`"
+                  :title="formatTitle(segment.label, segment.percentage, '%')"
                 />
                 <circle cx="60" cy="60" r="20" fill="white" />
               </svg>
             </div>
             
             <div class="flex-1 ml-6 space-y-3">
-              <div v-for="cause in causesData" :key="cause.label" class="flex items-center justify-between">
+              <div v-for="reason in reasonsData" :key="reason.label" class="flex items-center justify-between">
                 <div class="flex items-center space-x-2">
-                  <div class="w-3 h-3 rounded" :style="{ backgroundColor: cause.color }"></div>
-                  <span class="text-sm text-gray-700">{{ cause.label }}</span>
+                  <div class="w-3 h-3 rounded" :style="{ backgroundColor: reason.color }"></div>
+                  <span class="text-sm text-gray-700">{{ reason.label }}</span>
                 </div>
-                <span class="text-sm font-medium text-gray-900">{{ cause.percentage }}%</span>
+                <span class="text-sm font-medium text-gray-900">{{ reason.percentage }}%</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Overall Productivity YTD -->
+        <!-- Collection Usage YTD -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300">
           <div class="flex items-center justify-between mb-6">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Overall Productivity: YTD</h3>
-              <p class="text-sm text-gray-500">Year-to-date performance</p>
+              <h3 class="text-lg font-semibold text-gray-900">Collection Usage: YTD</h3>
+              <p class="text-sm text-gray-500">Year-to-date borrowing trends</p>
             </div>
             <button class="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50 transition-colors duration-200">
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -380,15 +387,15 @@
           </div>
           
           <div class="h-32 flex items-end justify-center space-x-8">
-            <div v-for="machine in overallProductivity" :key="machine.name" class="flex flex-col items-center space-y-2">
+            <div v-for="category in collectionUsage" :key="category.name" class="flex flex-col items-center space-y-2">
               <div 
                 class="w-12 rounded-t transition-all duration-1000 ease-out hover:opacity-80 cursor-pointer"
-                :class="machine.color"
-                :style="{ height: (machine.value / 100) * 120 + 'px' }"
-                :title="`${machine.name}: ${machine.value}%`"
+                :class="category.color"
+                :style="{ height: (category.value / 5000) * 100 + 'px' }"
+                :title="formatTitle(category.name, category.value, 'books')"
               ></div>
-              <span class="text-xs text-gray-600 font-medium">{{ machine.name }}</span>
-              <span class="text-sm font-bold text-gray-900">{{ machine.value }}%</span>
+              <span class="text-xs text-gray-600 font-medium">{{ category.name }}</span>
+              <span class="text-sm font-bold text-gray-900">{{ category.value }}</span>
             </div>
           </div>
         </div>
@@ -406,134 +413,134 @@ const isRefreshing = ref(false)
 
 // Metrics data
 const metrics = ref({
-  unitsLost: 342,
-  unitsLostChange: -1.1,
-  unitsProduced: 286094,
-  unitsProducedChange: -6,
-  plantProduction: 88.46,
-  plantProductionChange: 4,
-  maintenanceCost: 2.5
+  booksIssued: 12500,
+  booksIssuedChange: 5.2,
+  overdueBooks: 342,
+  overdueBooksChange: -1.1,
+  visitorCount: 15600,
+  visitorCountChange: 3.5,
+  digitalUsage: 4500
 })
 
 // Chart data
 const chartData = ref({
-  unitsLost: [
-    { label: 'Jan', machines: [
-      { name: 'Machine A', value: 25, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 15, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 10, color: 'bg-purple-500' }
+  booksIssued: [
+    { label: 'Jan', categories: [
+      { name: 'Fiction', value: 300, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 200, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 150, color: 'bg-purple-500' }
     ]},
-    { label: 'Feb', machines: [
-      { name: 'Machine A', value: 12, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 8, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 6, color: 'bg-purple-500' }
+    { label: 'Feb', categories: [
+      { name: 'Fiction', value: 280, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 180, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 140, color: 'bg-purple-500' }
     ]},
-    { label: 'Mar', machines: [
-      { name: 'Machine A', value: 15, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 10, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 8, color: 'bg-purple-500' }
+    { label: 'Mar', categories: [
+      { name: 'Fiction', value: 320, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 210, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 160, color: 'bg-purple-500' }
     ]},
-    { label: 'Apr', machines: [
-      { name: 'Machine A', value: 12, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 8, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 6, color: 'bg-purple-500' }
+    { label: 'Apr', categories: [
+      { name: 'Fiction', value: 290, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 190, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 145, color: 'bg-purple-500' }
     ]},
-    { label: 'May', machines: [
-      { name: 'Machine A', value: 20, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 12, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 9, color: 'bg-purple-500' }
+    { label: 'May', categories: [
+      { name: 'Fiction', value: 310, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 200, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 155, color: 'bg-purple-500' }
     ]},
-    { label: 'Jun', machines: [
-      { name: 'Machine A', value: 18, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 10, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 7, color: 'bg-purple-500' }
+    { label: 'Jun', categories: [
+      { name: 'Fiction', value: 300, color: 'bg-indigo-600' },
+      { name: 'Non-Fiction', value: 195, color: 'bg-yellow-500' },
+      { name: 'Academic', value: 150, color: 'bg-purple-500' }
     ]}
   ],
-  productivity: [
-    { label: 'Jan', machines: [
-      { name: 'Machine A', value: 75, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 65, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 70, color: 'bg-purple-500' }
+  visitors: [
+    { label: 'Jan', categories: [
+      { name: 'Students', value: 1200, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 300, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 150, color: 'bg-purple-500' }
     ]},
-    { label: 'Feb', machines: [
-      { name: 'Machine A', value: 68, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 58, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 63, color: 'bg-purple-500' }
+    { label: 'Feb', categories: [
+      { name: 'Students', value: 1100, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 280, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 140, color: 'bg-purple-500' }
     ]},
-    { label: 'Mar', machines: [
-      { name: 'Machine A', value: 72, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 62, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 67, color: 'bg-purple-500' }
+    { label: 'Mar', categories: [
+      { name: 'Students', value: 1300, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 320, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 160, color: 'bg-purple-500' }
     ]},
-    { label: 'Apr', machines: [
-      { name: 'Machine A', value: 70, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 60, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 65, color: 'bg-purple-500' }
+    { label: 'Apr', categories: [
+      { name: 'Students', value: 1150, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 290, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 145, color: 'bg-purple-500' }
     ]},
-    { label: 'May', machines: [
-      { name: 'Machine A', value: 78, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 68, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 73, color: 'bg-purple-500' }
+    { label: 'May', categories: [
+      { name: 'Students', value: 1250, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 310, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 155, color: 'bg-purple-500' }
     ]},
-    { label: 'Jun', machines: [
-      { name: 'Machine A', value: 75, color: 'bg-indigo-600' },
-      { name: 'Machine B', value: 65, color: 'bg-yellow-500' },
-      { name: 'Machine C', value: 70, color: 'bg-purple-500' }
+    { label: 'Jun', categories: [
+      { name: 'Students', value: 1200, color: 'bg-indigo-600' },
+      { name: 'Faculty', value: 300, color: 'bg-yellow-500' },
+      { name: 'Guests', value: 150, color: 'bg-purple-500' }
     ]}
   ]
 })
 
-// Operators data
-const operatorsData = ref([20, 19, 18, 19, 19, 25, 21, 20, 21, 20, 19, 20])
+// Staff data
+const staffData = ref([10, 9, 11, 10, 12, 10, 11, 10, 9, 11, 10, 12])
 
-// Causes data
-const causesData = ref([
-  { label: 'Tooling error', percentage: 40.5, color: '#1e40af' },
-  { label: 'Operator damage', percentage: 21.4, color: '#3730a3' },
-  { label: 'Physical damage', percentage: 21.4, color: '#a855f7' },
-  { label: 'Power shutdown', percentage: 12.1, color: '#f59e0b' },
-  { label: 'Other causes', percentage: 4.6, color: '#e5e7eb' }
+// Overdue reasons data
+const reasonsData = ref([
+  { label: 'Late Returns', percentage: 45.5, color: '#1e40af' },
+  { label: 'Lost Books', percentage: 25.4, color: '#3730a3' },
+  { label: 'Damaged Books', percentage: 15.4, color: '#a855f7' },
+  { label: 'System Error', percentage: 10.1, color: '#f59e0b' },
+  { label: 'Other', percentage: 3.6, color: '#e5e7eb' }
 ])
 
-// Overall productivity data
-const overallProductivity = ref([
-  { name: 'Machine A', value: 85, color: 'bg-indigo-600' },
-  { name: 'Machine B', value: 70, color: 'bg-yellow-500' },
-  { name: 'Machine C', value: 92, color: 'bg-purple-500' }
+// Collection usage data
+const collectionUsage = ref([
+  { name: 'Fiction', value: 4500, color: 'bg-indigo-600' },
+  { name: 'Non-Fiction', value: 3000, color: 'bg-yellow-500' },
+  { name: 'Academic', value: 2000, color: 'bg-purple-500' }
 ])
 
 // Computed properties
-const maintenanceProgress = computed(() => {
-  return Math.round((metrics.value.maintenanceCost / 5) * 100)
+const digitalUsageProgress = computed(() => {
+  return Math.round((metrics.value.digitalUsage / 6000) * 100)
 })
 
-const operatorPoints = computed(() => {
-  return operatorsData.value.map((value, index) => ({
+const staffPoints = computed(() => {
+  return staffData.value.map((value, index) => ({
     x: (index * 25) + 20,
-    y: 100 - (value * 3),
+    y: 100 - (value * 5),
     value
   }))
 })
 
-const operatorLinePoints = computed(() => {
-  return operatorPoints.value.map(point => `${point.x},${point.y}`).join(' ')
+const staffLinePoints = computed(() => {
+  return staffPoints.value.map(point => `${point.x},${point.y}`).join(' ')
 })
 
-const operatorAreaPoints = computed(() => {
-  const points = operatorPoints.value.map(point => `${point.x},${point.y}`).join(' ')
-  const firstX = operatorPoints.value[0]?.x || 20
-  const lastX = operatorPoints.value[operatorPoints.value.length - 1]?.x || 300
+const staffAreaPoints = computed(() => {
+  const points = staffPoints.value.map(point => `${point.x},${point.y}`).join(' ')
+  const firstX = staffPoints.value[0]?.x || 20
+  const lastX = staffPoints.value[staffPoints.value.length - 1]?.x || 300
   return `${firstX},100 ${points} ${lastX},100`
 })
 
 const pieSegments = computed(() => {
   let currentOffset = 0
-  return causesData.value.map(cause => {
-    const length = (cause.percentage / 100) * 314.16
+  return reasonsData.value.map(reason => {
+    const length = (reason.percentage / 100) * 314.16
     const segment = {
-      label: cause.label,
-      percentage: cause.percentage,
-      color: cause.color,
+      label: reason.label,
+      percentage: reason.percentage,
+      color: reason.color,
       length,
       offset: -currentOffset
     }
@@ -545,6 +552,10 @@ const pieSegments = computed(() => {
 // Methods
 const formatNumber = (num) => {
   return new Intl.NumberFormat().format(num)
+}
+
+const formatTitle = (name, value, unit) => {
+  return `${name}: ${value} ${unit}`
 }
 
 const refreshData = async () => {
