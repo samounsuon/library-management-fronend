@@ -4,6 +4,7 @@ import MemberView from '@/views/MemberView.vue'
 import BookVue from '@/views/BookVue.vue'
 import CategoryTable from '@/views/CategoryTable.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import BorrowView from "@/views/BorrowView.vue"
 // import Register from '@/views/Register.vue'
 // import Register from '@/components/Register.vue'
 
@@ -29,6 +30,11 @@ const router = createRouter({
       path: '/category',
       name: 'category',
       component: CategoryTable,
+    },
+    {
+      path: '/borrow',
+      name: 'borrow',
+      component: BorrowView,
     },
     {
       path: '/dashboard',
