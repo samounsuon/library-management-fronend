@@ -134,6 +134,20 @@
               Members
               <span class="ml-auto bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">89</span>
             </RouterLink>
+            <RouterLink
+              to="/borrow"
+              @click="sidebarOpen = false"
+              class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group"
+              :class="$route.path === '/borrow' 
+                ? 'text-blue-600 bg-blue-50 border-r-2 border-blue-600' 
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'"
+            >
+              <svg class="mr-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+              </svg>
+              Borrow
+              <span class="ml-auto bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">89</span>
+            </RouterLink>
 
             <div class="pt-4 mt-4 border-t border-gray-200">
               <RouterLink
